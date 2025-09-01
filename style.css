@@ -5,6 +5,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 28px;
     font-weight: 600;
+    -webkit-tap-highlight-color: transparent;
 }
 
 main {
