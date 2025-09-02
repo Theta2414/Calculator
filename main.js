@@ -15,6 +15,7 @@ const close = document.querySelector(".close");
 const saveBtns = document.querySelectorAll(".save");
 const callBtns = document.querySelectorAll(".call"); 
 const vals = document.querySelectorAll(".val");
+const delCache = document.querySelector(".del-cache");
 
 const operate = {
     "add": function (num1, num2) {
@@ -189,3 +190,5 @@ callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
     display.textContent = vals[index].textContent;
     close.click();
 }));
+
+delCache.addEventListener("click", (e) => vals.forEach(val => val.textContent = "0"));
