@@ -8,15 +8,22 @@ const multiply = document.querySelector(".btn-multi");
 const divide = document.querySelector(".btn-divide");
 const percent = document.querySelector(".btn-percent");
 const equal = document.querySelector(".btn-equal");
+const save = document.querySelector(".btn-save");
+const board = document.querySelector(".save-list-container");
+const innerBoard = document.querySelector(".save-list");
+const close = document.querySelector(".close");
+const saveBtns = document.querySelectorAll(".save");
+const callBtns = document.querySelectorAll(".call"); 
+const vals = document.querySelectorAll(".val");
 
 const operate = {
-    "add": function(num1, num2) {
+    "add": function (num1, num2) {
         return num1 + num2;
     },
-    "subtract": function(num1, num2) {
+    "subtract": function (num1, num2) {
         return num1 - num2;
     },
-    "multiply": function(num1, num2) {
+    "multiply": function (num1, num2) {
         return num1 * num2;
     },
     "divide": function (num1, num2) {
@@ -81,18 +88,20 @@ function addOperantsAndCalculate() {
         }
     }
     if ((Number(queue) !== Number(newNum))) {
+        //newNum is presented as string, "0" returns true
         if (newNum) {
             queue = newNum;
             newNum = null;
         }
     }
-    if (!(forceStop)) {
+    if (!forceStop) {
+        //main and queue are presented as string, "0" returns true
         if (main && queue) {
             display.textContent = calculate(main, queue);
             main = display.textContent;
         }
     }
-    //Return the initial state
+    //Change back to the initial state
     forceStop = true;
     clickedEqual = false;
     focus = "main";
@@ -103,22 +112,19 @@ numsPad.forEach(num => num.addEventListener("click", (e) => {
     if (e.target.textContent === "." && !(display.textContent.includes("."))) {
         display.textContent += ".";
         renew = false;
-        forceStop = false;
     } else if (e.target.textContent === "0" && (display.textContent[0] !== "0")) {
         display.textContent += "0";
         renew = false;
-        forceStop = false;
     } else if (e.target.textContent !== "." && e.target.textContent !== "0") {
         if (display.textContent[0] === "0" && display.textContent[1] !== ".") display.textContent = "";
         display.textContent += e.target.textContent;
         renew = false;
-        forceStop = false;
     }
     forceStop = false;
     focus = "input";
 }));
 
-ac.addEventListener("click", AC );
+ac.addEventListener("click", AC);
 del.addEventListener("click", delF);
 
 add.addEventListener("click", (e) => {
@@ -150,7 +156,7 @@ divide.addEventListener("click", (e) => {
 });
 
 percent.addEventListener("click", (e) => {
-    display.textContent = Number(display.textContent)/100;
+    display.textContent = display.textContent/100;
 })
 
 equal.addEventListener("click", (e) => {
@@ -158,3 +164,28 @@ equal.addEventListener("click", (e) => {
     addOperantsAndCalculate();
     renew = true;
 });
+
+save.addEventListener("click", (e) => {
+    board.removeAttribute("hidden");
+});
+
+board.addEventListener("click", (e) => {
+    board.setAttribute("hidden", "true");
+});
+
+innerBoard.addEventListener("click", (e) => {
+    e.stopPropagation();
+});
+
+close.addEventListener("click", (e) => {
+    board.setAttribute("hidden", "true");
+});
+
+saveBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
+    vals[index].textContent = display.textContent;
+}));
+
+callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
+    display.textContent = vals[index].textContent;
+    close.click();
+}));
