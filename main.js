@@ -53,6 +53,8 @@ function AC() {
     queue = null;
     newNum = null;
     forceStop = false;
+    operator = null;
+    focus = "input";
 }
 
 function delF() {
