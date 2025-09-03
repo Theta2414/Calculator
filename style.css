@@ -43,6 +43,22 @@ main {
     cursor: default;
 }
 
+.input-field {
+    border: none;
+    background-color: transparent;
+    font-size: 28px;
+    text-align: right;
+    color: white;
+    font-weight: 600;
+    width: 100%;
+}
+
+.input-field:focus {
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
 .keyboard {
     display: flex;
     flex-direction: row;
@@ -118,6 +134,10 @@ main {
 
 .box:last-child {
     margin-bottom: 0;
+}
+
+.box > p {
+    align-self: center;
 }
 
 .val {

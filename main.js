@@ -1,5 +1,6 @@
 const numsPad = document.querySelectorAll(".num");
 const display = document.querySelector(".display");
+const input = document.querySelector(".input-field");
 const ac = document.querySelector(".btn-ac");
 const del = document.querySelector(".btn-del");
 const add = document.querySelector(".btn-add");
@@ -33,6 +34,8 @@ const operate = {
     }
 }
 
+let digit = "0123456789.";
+
 //Not allow to calculate
 let forceStop = false;
 
@@ -47,8 +50,31 @@ let focus = "main";
 
 let clickedEqual = false;
 
+function insertDigit(e) {
+    let text;
+    if (e.target.textContent) {
+        text = e.target.textContent;
+    } else {
+        text = e.key;
+    }
+    if (renew) input.value = "0";
+    if (text === "." && !(input.value.includes("."))) {
+        input.value += ".";
+        renew = false;
+    } else if (text === "0" && (input.value[0] !== "0")) {
+        input.value += "0";
+        renew = false;
+    } else if (text !== "." && text !== "0") {
+        if (input.value[0] === "0" && input.value[1] !== ".") input.value = "";
+        input.value += text;
+        renew = false;
+    }
+    forceStop = false;
+    focus = "input";
+}
+
 function AC() {
-    display.textContent = "0";
+    input.value = "0";
     main = null;
     queue = null;
     newNum = null;
@@ -58,11 +84,14 @@ function AC() {
 }
 
 function delF() {
-    if (display.textContent.length === 1) {
-        display.textContent = "0";
-        if (focus === "main") main = 0;
+    if (input.value.length === 1) {
+        input.value = "0";
+        if (focus === "main") {
+            main = null;
+            queue = null;
+        };
     } else {
-        display.textContent = display.textContent.slice(0, -1);
+        input.value = input.value.slice(0, -1);
         if (focus === "main") main = Number(main.toString().slice(0, -1));
     }
 }
@@ -80,14 +109,14 @@ function addOperantsAndCalculate() {
     if (clickedEqual) forceStop = false;
     //Data in num1 must be empty, 0 is not considered empty
     if (!main && main !== 0) {
-        main = display.textContent;
+        main = input.value;
     //Then check queue
     } else if (!queue && queue !== 0) {
-        queue = display.textContent;
+        queue = input.value;
     //All full, asign to newNum
     } else {
         if (!clickedEqual || (clickedEqual && !renew)) {
-            newNum = display.textContent;
+            newNum = input.value;
         }
     }
     if ((Number(queue) !== Number(newNum))) {
@@ -100,8 +129,8 @@ function addOperantsAndCalculate() {
     if (!forceStop) {
         //main and queue are presented as string, "0" returns true
         if (main && queue) {
-            display.textContent = calculate(main, queue);
-            main = display.textContent;
+            input.value = calculate(main, queue);
+            main = input.value;
         }
     }
     //Change back to the initial state
@@ -110,22 +139,7 @@ function addOperantsAndCalculate() {
     focus = "main";
 }
 
-numsPad.forEach(num => num.addEventListener("click", (e) => {
-    if (renew) display.textContent = "0";
-    if (e.target.textContent === "." && !(display.textContent.includes("."))) {
-        display.textContent += ".";
-        renew = false;
-    } else if (e.target.textContent === "0" && (display.textContent[0] !== "0")) {
-        display.textContent += "0";
-        renew = false;
-    } else if (e.target.textContent !== "." && e.target.textContent !== "0") {
-        if (display.textContent[0] === "0" && display.textContent[1] !== ".") display.textContent = "";
-        display.textContent += e.target.textContent;
-        renew = false;
-    }
-    forceStop = false;
-    focus = "input";
-}));
+numsPad.forEach(num => num.addEventListener("click", insertDigit));
 
 ac.addEventListener("click", AC);
 del.addEventListener("click", delF);
@@ -159,13 +173,71 @@ divide.addEventListener("click", (e) => {
 });
 
 percent.addEventListener("click", (e) => {
-    display.textContent = display.textContent/100;
+    input.value = input.value/100;
 })
 
 equal.addEventListener("click", (e) => {
     clickedEqual = true;
     addOperantsAndCalculate();
     renew = true;
+});
+
+input.addEventListener("keydown", (e) => {
+    e.preventDefault();
+
+    switch (e.key) {
+        case "Backspace":
+            delF();
+            break;
+
+        case "Enter":
+            clickedEqual = true;
+            addOperantsAndCalculate();
+            renew = true;
+            break;
+
+        case "+":
+            addOperantsAndCalculate();
+            operator = "add";
+            renew = true;
+            forceStop = true;
+            break;
+
+        case "-":
+            addOperantsAndCalculate();
+            operator = "subtract";
+            renew = true;
+            forceStop = true;
+            break;
+
+        case "*":
+            addOperantsAndCalculate();
+            operator = "multiply";
+            renew = true;
+            forceStop = true;
+            break;
+
+        case "/":
+            addOperantsAndCalculate();
+            operator = "divide";
+            renew = true;
+            forceStop = true;
+            break;
+
+        case "%":
+            input.value = input.value/100;
+            break;
+        
+        case "Delete":
+            AC();
+            break;
+
+        default:
+            if (digit.includes(e.key)) {
+                insertDigit(e);
+            }
+            break;
+    }
 });
 
 save.addEventListener("click", (e) => {
@@ -185,12 +257,14 @@ close.addEventListener("click", (e) => {
 });
 
 saveBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
-    vals[index].textContent = display.textContent;
+    vals[index].textContent = input.value;
 }));
 
 callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
-    display.textContent = vals[index].textContent;
+    input.value = vals[index].textContent;
     close.click();
 }));
+
+ac.dispatchEvent(new Event("click"));
 
 delCache.addEventListener("click", (e) => vals.forEach(val => val.textContent = "0"));
