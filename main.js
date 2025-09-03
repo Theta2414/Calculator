@@ -1,5 +1,6 @@
 const numsPad = document.querySelectorAll(".num");
 const display = document.querySelector(".display");
+const show = document.querySelector(".show");
 const input = document.querySelector(".input-field");
 const ac = document.querySelector(".btn-ac");
 const del = document.querySelector(".btn-del");
@@ -41,7 +42,10 @@ let forceStop = false;
 
 let main = null;
 let queue = null;
-let operator = null;
+let operator = {
+    key: null,
+    action: null
+};
 //Turn the display to show "0"
 let renew = true;
 let newNum = null;
@@ -79,8 +83,10 @@ function AC() {
     queue = null;
     newNum = null;
     forceStop = false;
-    operator = null;
+    operator.key = null;
+    operator.action = null;
     focus = "input";
+    show.textContent = "";
 }
 
 function delF() {
@@ -89,17 +95,19 @@ function delF() {
         if (focus === "main") {
             main = null;
             queue = null;
+            show.textContent = "";
         };
     } else {
         input.value = input.value.slice(0, -1);
         if (focus === "main") main = Number(main.toString().slice(0, -1));
     }
+    renew = false;
 }
 
 function calculate(num1, num2) {
     num1 = Number(num1);
     num2 = Number(num2);
-    return operate[operator](num1, num2);
+    return operate[operator.action](num1, num2);
 }
 
 function addOperantsAndCalculate() {
@@ -107,7 +115,7 @@ function addOperantsAndCalculate() {
     if (clickedEqual) forceStop = false;
     //Data in num1 must be empty, 0 is not considered empty
     if (!main && main !== 0) {
-        main = input.value;
+       main = input.value; 
     //Then check queue
     } else if (!queue && queue !== 0) {
         queue = input.value;
@@ -126,9 +134,13 @@ function addOperantsAndCalculate() {
     }
     if (!forceStop) {
         //main and queue are presented as string, "0" returns true
-        if (main && queue && operator) {
+        if (main && queue && operator.action) {
             input.value = calculate(main, queue);
             main = input.value;
+            if (show.textContent.includes("=")) {
+                show.textContent = main + operator.key;
+            }
+            show.textContent += queue + " = "
         }
     }
     //Change back to the initial state
@@ -144,30 +156,38 @@ del.addEventListener("click", delF);
 
 add.addEventListener("click", (e) => {
     addOperantsAndCalculate();
-    operator = "add";
+    operator.key = " + ";
+    operator.action = "add";
     renew = true;
     forceStop = true;
+    show.textContent = main + " + ";
 });
 
 subtract.addEventListener("click", (e) => {
     addOperantsAndCalculate();
-    operator = "subtract";
+    operator.key = " – ";
+    operator.action = "subtract";
     renew = true;
     forceStop = true;
+    show.textContent = main + " – ";
 });
 
 multiply.addEventListener("click", (e) => {
     addOperantsAndCalculate();
-    operator = "multiply";
+    operator.key = " × ";
+    operator.action = "multiply";
     renew = true;
     forceStop = true;
+    show.textContent = main + " × ";
 });
 
 divide.addEventListener("click", (e) => {
     addOperantsAndCalculate();
-    operator = "divide";
+    operator.key = " ÷ ";
+    operator.action = "divide";
     renew = true;
     forceStop = true;
+    show.textContent = main + " ÷ ";
 });
 
 percent.addEventListener("click", (e) => {
@@ -196,30 +216,38 @@ input.addEventListener("keydown", (e) => {
 
         case "+":
             addOperantsAndCalculate();
-            operator = "add";
+            operator.key = " + ";
+            operator.action = "add";
             renew = true;
             forceStop = true;
+            show.textContent = main + " + ";
             break;
 
         case "-":
             addOperantsAndCalculate();
-            operator = "subtract";
+            operator.key = " – ";
+            operator.action = "subtract";
             renew = true;
             forceStop = true;
+            show.textContent = main + " – ";
             break;
 
         case "*":
             addOperantsAndCalculate();
-            operator = "multiply";
+            operator.key = " × ";
+            operator.action = "multiply";
             renew = true;
             forceStop = true;
+            show.textContent = main + " × ";
             break;
 
         case "/":
             addOperantsAndCalculate();
-            operator = "divide";
+            operator.key = " ÷ ";
+            operator.action = "divide";
             renew = true;
             forceStop = true;
+            show.textContent = main + " ÷ ";
             break;
 
         case "%":
@@ -258,6 +286,7 @@ saveBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
 
 callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
     input.value = vals[index].textContent;
+    renew = false;
     close.click();
 }));
 
