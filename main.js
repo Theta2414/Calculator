@@ -99,9 +99,7 @@ function delF() {
 function calculate(num1, num2) {
     num1 = Number(num1);
     num2 = Number(num2);
-    if (operator && num1 || num1 === 0 && num2 || num2 === 0) {
-        return operate[operator](num1, num2);
-    }
+    return operate[operator](num1, num2);
 }
 
 function addOperantsAndCalculate() {
@@ -128,7 +126,7 @@ function addOperantsAndCalculate() {
     }
     if (!forceStop) {
         //main and queue are presented as string, "0" returns true
-        if (main && queue) {
+        if (main && queue && operator) {
             input.value = calculate(main, queue);
             main = input.value;
         }
@@ -184,7 +182,7 @@ equal.addEventListener("click", (e) => {
 
 input.addEventListener("keydown", (e) => {
     e.preventDefault();
-
+    
     switch (e.key) {
         case "Backspace":
             delF();
@@ -233,9 +231,7 @@ input.addEventListener("keydown", (e) => {
             break;
 
         default:
-            if (digit.includes(e.key)) {
-                insertDigit(e);
-            }
+            if (digit.includes(e.key)) insertDigit(e)
             break;
     }
 });
