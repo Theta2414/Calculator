@@ -296,6 +296,7 @@ callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
     } else {
         AC();
         input.value = vals[index].textContent;
+        renew = false;
         close.click();
     }
 }));
