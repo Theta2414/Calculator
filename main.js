@@ -287,9 +287,17 @@ saveBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
 }));
 
 callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
-    input.value = vals[index].textContent;
-    renew = false;
-    close.click();
+    console.log(focus);
+    console.log(e);
+    if (focus !== "main") {
+        input.value = vals[index].textContent;
+        renew = false;
+        close.click();
+    } else {
+        AC();
+        input.value = vals[index].textContent;
+        close.click();
+    }
 }));
 
 ac.dispatchEvent(new Event("click"));
