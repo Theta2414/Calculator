@@ -35,18 +35,19 @@ const operate = {
     }
 }
 
-let digit = "0123456789.";
+const digit = "0123456789.";
 
 //Not allow to calculate
 let forceStop = false;
 
 let main = null;
 let queue = null;
+
 let operator = {
     key: null,
     action: null
 };
-//Turn the display to show "0"
+
 let renew = true;
 let newNum = null;
 
@@ -96,6 +97,7 @@ function delF() {
             main = null;
             queue = null;
             show.textContent = "";
+            AC();
         };
     } else {
         input.value = input.value.slice(0, -1);
