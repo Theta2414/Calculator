@@ -56,26 +56,32 @@ let focus = "main";
 let clickedEqual = false;
 
 function insertDigit(e) {
-    let text;
+    let text = null;
     if (e.target.textContent) {
         text = e.target.textContent;
     } else {
         text = e.key;
     }
-    if (renew) input.value = "0";
     if (text === "." && !(input.value.includes("."))) {
+        if (renew) input.value = "0";
         input.value += ".";
         renew = false;
+        forceStop = false;
+        focus = "input";
     } else if (text === "0" && (input.value[0] !== "0")) {
+        if (renew) input.value = "0";
         input.value += "0";
         renew = false;
+        forceStop = false;
+        focus = "input";
     } else if (text !== "." && text !== "0") {
+        if (renew) input.value = "0";
         if (input.value[0] === "0" && input.value[1] !== ".") input.value = "";
         input.value += text;
         renew = false;
+        forceStop = false;
+        focus = "input";
     }
-    forceStop = false;
-    focus = "input";
 }
 
 function AC() {
@@ -287,17 +293,15 @@ saveBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
 }));
 
 callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
-    console.log(focus);
-    console.log(e);
     if (focus !== "main") {
         input.value = vals[index].textContent;
         renew = false;
-        close.click();
+        board.setAttribute("hidden", "true");
     } else {
         AC();
         input.value = vals[index].textContent;
         renew = false;
-        close.click();
+        board.setAttribute("hidden", "true");
     }
 }));
 
