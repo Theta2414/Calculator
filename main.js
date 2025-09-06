@@ -56,6 +56,7 @@ let focus = "main";
 let clickedEqual = false;
 
 function insertDigit(e) {
+    if (renew) input.value = "0";
     let text = null;
     if (e.target.textContent) {
         text = e.target.textContent;
@@ -63,19 +64,16 @@ function insertDigit(e) {
         text = e.key;
     }
     if (text === "." && !(input.value.includes("."))) {
-        if (renew) input.value = "0";
         input.value += ".";
         renew = false;
         forceStop = false;
         focus = "input";
     } else if (text === "0" && (input.value[0] !== "0")) {
-        if (renew) input.value = "0";
         input.value += "0";
         renew = false;
         forceStop = false;
         focus = "input";
     } else if (text !== "." && text !== "0") {
-        if (renew) input.value = "0";
         if (input.value[0] === "0" && input.value[1] !== ".") input.value = "";
         input.value += text;
         renew = false;
@@ -267,7 +265,8 @@ input.addEventListener("keydown", (e) => {
             break;
 
         default:
-            if (digit.includes(e.key)) insertDigit(e)
+            console.log(e);
+            if (digit.includes(e.key)) insertDigit(e);
             break;
     }
 });
