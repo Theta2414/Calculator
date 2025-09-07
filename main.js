@@ -205,6 +205,7 @@ add.addEventListener("click", (e) => {
     renew = true;
     forceStop = true;
     show.textContent = addCommas(main) + " + ";
+    focus = "input";
 });
 
 subtract.addEventListener("click", (e) => {
@@ -214,6 +215,7 @@ subtract.addEventListener("click", (e) => {
     renew = true;
     forceStop = true;
     show.textContent = addCommas(removeCommas(main)) + " – ";
+    focus = "input";
 });
 
 multiply.addEventListener("click", (e) => {
@@ -223,6 +225,7 @@ multiply.addEventListener("click", (e) => {
     renew = true;
     forceStop = true;
     show.textContent = addCommas(removeCommas(main)) + " × ";
+    focus = "input";
 });
 
 divide.addEventListener("click", (e) => {
@@ -232,6 +235,7 @@ divide.addEventListener("click", (e) => {
     renew = true;
     forceStop = true;
     show.textContent = addCommas(removeCommas(main)) + " ÷ ";
+    focus = "input";
 });
 
 percent.addEventListener("click", (e) => {
@@ -265,6 +269,7 @@ input.addEventListener("keydown", (e) => {
             renew = true;
             forceStop = true;
             show.textContent = main + " + ";
+            focus = "input";
             break;
 
         case "-":
@@ -274,6 +279,7 @@ input.addEventListener("keydown", (e) => {
             renew = true;
             forceStop = true;
             show.textContent = main + " – ";
+            focus = "input";
             break;
 
         case "*":
@@ -283,6 +289,7 @@ input.addEventListener("keydown", (e) => {
             renew = true;
             forceStop = true;
             show.textContent = main + " × ";
+            focus = "input";
             break;
 
         case "/":
@@ -292,6 +299,7 @@ input.addEventListener("keydown", (e) => {
             renew = true;
             forceStop = true;
             show.textContent = main + " ÷ ";
+            focus = "input";
             break;
 
         case "%":
