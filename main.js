@@ -55,6 +55,39 @@ let focus = "main";
 
 let clickedEqual = false;
 
+function addCommas(number) {
+    let arr;
+    let after;
+    number = number.toString();
+    if (number.includes(".")) {
+        arr = number.split(".")[0].split("");
+        after = number.split(".")[1];
+    } else {
+        arr = number.split("");
+    }
+    if (number.length <= 3) return number.toString();
+    if (arr.length % 3 === 1) {
+        i = 1;
+    } else if (arr.length % 3 === 2) {
+        i = 2;
+    } else if (arr.length % 3 === 0) {
+        i = 3;
+    }
+    for (i; i < arr.length; i += 3) {
+        arr.splice(i, 0, ",");
+        i++;
+    }
+    if (number.includes(".")) {
+        return arr.join("") + "." + after;
+    } else {
+        return arr.join("");
+    }
+}
+
+function removeCommas(number) {
+    return Number(number.split(",").join(""));
+}
+
 function insertDigit(e) {
     if (renew) input.value = "0";
     let text = null;
@@ -64,6 +97,7 @@ function insertDigit(e) {
         text = e.key;
     }
     if (text === "." && !(input.value.includes("."))) {
+        console.log(e);
         input.value += ".";
         renew = false;
         forceStop = false;
@@ -73,12 +107,16 @@ function insertDigit(e) {
         renew = false;
         forceStop = false;
         focus = "input";
+        input.value = removeCommas(input.value);
+        input.value = addCommas(input.value);
     } else if (text !== "." && text !== "0") {
         if (input.value[0] === "0" && input.value[1] !== ".") input.value = "";
         input.value += text;
         renew = false;
         forceStop = false;
         focus = "input";
+        input.value = removeCommas(input.value);
+        input.value = addCommas(input.value);
     }
 }
 
@@ -121,14 +159,14 @@ function addOperantsAndCalculate() {
     if (clickedEqual) forceStop = false;
     //Data in num1 must be empty, 0 is not considered empty
     if (!main && main !== 0) {
-       main = input.value; 
+       main = removeCommas(input.value).toString(); 
     //Then check queue
     } else if (!queue && queue !== 0) {
-        queue = input.value;
+        queue = removeCommas(input.value).toString();
     //All full, asign to newNum
     } else {
         if (!clickedEqual || (clickedEqual && !renew)) {
-            newNum = input.value;
+            newNum = removeCommas(input.value).toString();
         }
     }
     if ((Number(queue) !== Number(newNum))) {
@@ -141,12 +179,12 @@ function addOperantsAndCalculate() {
     if (!forceStop) {
         //main and queue are presented as string, "0" returns true
         if (main && queue && operator.action) {
-            input.value = calculate(main, queue);
-            main = input.value;
+            input.value = addCommas(calculate(main, queue));
+            main = removeCommas(input.value);
             if (show.textContent.includes("=")) {
-                show.textContent = main + operator.key;
+                show.textContent = addCommas(main) + operator.key;
             }
-            show.textContent += queue + " = "
+            show.textContent += addCommas(queue) + " = ";
         }
     }
     //Change back to the initial state
@@ -166,7 +204,7 @@ add.addEventListener("click", (e) => {
     operator.action = "add";
     renew = true;
     forceStop = true;
-    show.textContent = main + " + ";
+    show.textContent = addCommas(main) + " + ";
 });
 
 subtract.addEventListener("click", (e) => {
@@ -175,7 +213,7 @@ subtract.addEventListener("click", (e) => {
     operator.action = "subtract";
     renew = true;
     forceStop = true;
-    show.textContent = main + " – ";
+    show.textContent = addCommas(removeCommas(main)) + " – ";
 });
 
 multiply.addEventListener("click", (e) => {
@@ -184,7 +222,7 @@ multiply.addEventListener("click", (e) => {
     operator.action = "multiply";
     renew = true;
     forceStop = true;
-    show.textContent = main + " × ";
+    show.textContent = addCommas(removeCommas(main)) + " × ";
 });
 
 divide.addEventListener("click", (e) => {
@@ -193,7 +231,7 @@ divide.addEventListener("click", (e) => {
     operator.action = "divide";
     renew = true;
     forceStop = true;
-    show.textContent = main + " ÷ ";
+    show.textContent = addCommas(removeCommas(main)) + " ÷ ";
 });
 
 percent.addEventListener("click", (e) => {
@@ -265,7 +303,6 @@ input.addEventListener("keydown", (e) => {
             break;
 
         default:
-            console.log(e);
             if (digit.includes(e.key)) insertDigit(e);
             break;
     }
