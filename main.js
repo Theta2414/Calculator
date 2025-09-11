@@ -20,15 +20,12 @@ const vals = document.querySelectorAll(".val");
 const delCache = document.querySelector(".del-cache");
 
 const operate = {
-    "add": function (num1, num2) {
-        return num1 + num2;
-    },
-    "subtract": function (num1, num2) {
-        return num1 - num2;
-    },
-    "multiply": function (num1, num2) {
-        return num1 * num2;
-    },
+    "add": (num1, num2) => num1 + num2,
+
+    "subtract": (num1, num2) => num1 - num2,
+
+    "multiply": (num1, num2) => num1 * num2,
+    
     "divide": function (num1, num2) {
         if (num2 === 0) return "Error";
         return num1 / num2;
@@ -59,13 +56,13 @@ function addCommas(number) {
     let arr;
     let after;
     number = number.toString();
+    if (number.length <= 3) return number.toString();
     if (number.includes(".")) {
         arr = number.split(".")[0].split("");
         after = number.split(".")[1];
     } else {
         arr = number.split("");
     }
-    if (number.length <= 3) return number.toString();
     if (arr.length % 3 === 1) {
         i = 1;
     } else if (arr.length % 3 === 2) {
@@ -97,7 +94,6 @@ function insertDigit(e) {
         text = e.key;
     }
     if (text === "." && !(input.value.includes("."))) {
-        console.log(e);
         input.value += ".";
         renew = false;
         forceStop = false;
@@ -240,7 +236,7 @@ divide.addEventListener("click", (e) => {
 
 percent.addEventListener("click", (e) => {
     input.value = input.value/100;
-})
+});
 
 equal.addEventListener("click", (e) => {
     clickedEqual = true;
