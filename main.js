@@ -55,7 +55,7 @@ let clickedEqual = false;
 function addCommas(number) {
     let arr;
     let after;
-    if (number === Infinity) return "Infinity";
+    if (number === Infinity || number === "Infinity") return "Infinity";
     number = number.toString();
     if (number.length <= 3) return number.toString();
     if (number.includes(".")) {
