@@ -55,6 +55,7 @@ let clickedEqual = false;
 function addCommas(number) {
     let arr;
     let after;
+    if (number === Infinity) return "Infinity";
     number = number.toString();
     if (number.length <= 3) return number.toString();
     if (number.includes(".")) {
@@ -129,7 +130,7 @@ function AC() {
 }
 
 function delF() {
-    if (input.value.length === 1) {
+    if (input.value.length === 1 || input.value === `Infinity`) {
         input.value = "0";
         if (focus === "main") {
             main = null;
@@ -138,7 +139,7 @@ function delF() {
             AC();
         };
     } else {
-        input.value = input.value.slice(0, -1);
+        input.value = addCommas(removeCommas(input.value.slice(0, -1)));
         if (focus === "main") main = Number(main.toString().slice(0, -1));
     }
     renew = false;
@@ -175,7 +176,11 @@ function addOperantsAndCalculate() {
     if (!forceStop) {
         //main and queue are presented as string, "0" returns true
         if (main && queue && operator.action) {
-            input.value = addCommas(calculate(main, queue));
+            if (calculate(main, queue) !== Infinity)
+                input.value = addCommas(calculate(main, queue));
+            else {
+                input.value = Infinity
+            }
             main = removeCommas(input.value);
             if (show.textContent.includes("=")) {
                 show.textContent = addCommas(main) + operator.key;
@@ -210,7 +215,7 @@ subtract.addEventListener("click", (e) => {
     operator.action = "subtract";
     renew = true;
     forceStop = true;
-    show.textContent = addCommas(removeCommas(main)) + " – ";
+    show.textContent = addCommas(main) + " – ";
     focus = "input";
 });
 
@@ -220,7 +225,7 @@ multiply.addEventListener("click", (e) => {
     operator.action = "multiply";
     renew = true;
     forceStop = true;
-    show.textContent = addCommas(removeCommas(main)) + " × ";
+    show.textContent = addCommas(main) + " × ";
     focus = "input";
 });
 
@@ -230,7 +235,7 @@ divide.addEventListener("click", (e) => {
     operator.action = "divide";
     renew = true;
     forceStop = true;
-    show.textContent = addCommas(removeCommas(main)) + " ÷ ";
+    show.textContent = addCommas(main) + " ÷ ";
     focus = "input";
 });
 
@@ -264,7 +269,7 @@ input.addEventListener("keydown", (e) => {
             operator.action = "add";
             renew = true;
             forceStop = true;
-            show.textContent = main + " + ";
+            show.textContent = addCommas(main) + " + ";
             focus = "input";
             break;
 
@@ -274,7 +279,7 @@ input.addEventListener("keydown", (e) => {
             operator.action = "subtract";
             renew = true;
             forceStop = true;
-            show.textContent = main + " – ";
+            show.textContent = addCommas(main) + " – ";
             focus = "input";
             break;
 
@@ -284,7 +289,7 @@ input.addEventListener("keydown", (e) => {
             operator.action = "multiply";
             renew = true;
             forceStop = true;
-            show.textContent = main + " × ";
+            show.textContent = addCommas(main) + " × ";
             focus = "input";
             break;
 
@@ -294,7 +299,7 @@ input.addEventListener("keydown", (e) => {
             operator.action = "divide";
             renew = true;
             forceStop = true;
-            show.textContent = main + " ÷ ";
+            show.textContent = addCommas(main) + " ÷ ";
             focus = "input";
             break;
 
