@@ -63,7 +63,7 @@ function addCommas(number) {
         number = number.slice(1);
     };
 
-    if (number === "Infinity") return "Infinity";
+    if (number === "Infinity" || number === "Error") return number;
 
     if (number.length <= 3) {
         if (negative) {
@@ -113,7 +113,8 @@ function removeCommas(number) {
 }
 
 function insertDigit(e) {
-    if (renew) input.value = "0";
+    if (input.value === "Error") AC();
+    if (renew) input.value = "";
     let text = null;
     if (e.target.textContent) {
         text = e.target.textContent;
@@ -175,9 +176,8 @@ function calculate(num1, num2) {
     num1 = Number(num1);
     num2 = Number(num2);
     if (Number.isNaN(num1) || Number.isNaN(num2)) {
-        AC();
         return "Error";
-    };
+    }
     return operate[operator.action](num1, num2);
 }
 
@@ -230,6 +230,7 @@ ac.addEventListener("click", AC);
 del.addEventListener("click", delF);
 
 add.addEventListener("click", (e) => {
+    if (input.value === "Error") AC();
     addOperantsAndCalculate();
     operator.key = " + ";
     operator.action = "add";
@@ -240,6 +241,7 @@ add.addEventListener("click", (e) => {
 });
 
 subtract.addEventListener("click", (e) => {
+    if (input.value === "Error") AC();
     addOperantsAndCalculate();
     operator.key = " – ";
     operator.action = "subtract";
@@ -250,6 +252,7 @@ subtract.addEventListener("click", (e) => {
 });
 
 multiply.addEventListener("click", (e) => {
+    if (input.value === "Error") AC();
     addOperantsAndCalculate();
     operator.key = " × ";
     operator.action = "multiply";
@@ -260,6 +263,7 @@ multiply.addEventListener("click", (e) => {
 });
 
 divide.addEventListener("click", (e) => {
+    if (input.value === "Error") AC();
     addOperantsAndCalculate();
     operator.key = " ÷ ";
     operator.action = "divide";
@@ -294,6 +298,7 @@ input.addEventListener("keydown", (e) => {
             break;
 
         case "+":
+            if (input.value === "Error") AC();
             addOperantsAndCalculate();
             operator.key = " + ";
             operator.action = "add";
@@ -304,6 +309,7 @@ input.addEventListener("keydown", (e) => {
             break;
 
         case "-":
+            if (input.value === "Error") AC();
             addOperantsAndCalculate();
             operator.key = " – ";
             operator.action = "subtract";
@@ -314,6 +320,7 @@ input.addEventListener("keydown", (e) => {
             break;
 
         case "*":
+            if (input.value === "Error") AC();
             addOperantsAndCalculate();
             operator.key = " × ";
             operator.action = "multiply";
@@ -324,6 +331,7 @@ input.addEventListener("keydown", (e) => {
             break;
 
         case "/":
+            if (input.value === "Error") AC();
             addOperantsAndCalculate();
             operator.key = " ÷ ";
             operator.action = "divide";
