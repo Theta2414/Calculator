@@ -55,15 +55,31 @@ let clickedEqual = false;
 function addCommas(number) {
     let arr;
     let after;
-    if (number === Infinity || number === "Infinity") return "Infinity";
+    let negative;
     number = number.toString();
-    if (number.length <= 3) return number.toString();
+
+    if (number.includes("-")) {
+        negative = true;
+        number = number.slice(1);
+    };
+
+    if (number === "Infinity") return "Infinity";
+
+    if (number.length <= 3) {
+        if (negative) {
+            return "-" + number;
+        } else {
+            return number;
+        }
+    };
+
     if (number.includes(".")) {
         arr = number.split(".")[0].split("");
         after = number.split(".")[1];
     } else {
         arr = number.split("");
     }
+
     if (arr.length % 3 === 1) {
         i = 1;
     } else if (arr.length % 3 === 2) {
@@ -71,19 +87,29 @@ function addCommas(number) {
     } else if (arr.length % 3 === 0) {
         i = 3;
     }
+
     for (i; i < arr.length; i += 3) {
         arr.splice(i, 0, ",");
         i++;
     }
+
     if (number.includes(".")) {
-        return arr.join("") + "." + after;
+        if (negative) {
+            return "-" + arr.join("") + "." + after;
+        } else {
+            return arr.join("") + "." + after;
+        }
     } else {
-        return arr.join("");
+        if (negative) {
+            return "-" + arr.join("");
+        } else {
+            return arr.join("");
+        }
     }
 }
 
 function removeCommas(number) {
-    return Number(number.split(",").join(""));
+    return number.split(",").join("");
 }
 
 function insertDigit(e) {
@@ -140,7 +166,7 @@ function delF() {
         };
     } else {
         input.value = addCommas(removeCommas(input.value.slice(0, -1)));
-        if (focus === "main") main = Number(main.toString().slice(0, -1));
+        if (focus === "main") main = main.toString().slice(0, -1);
     }
     renew = false;
 }
@@ -148,6 +174,10 @@ function delF() {
 function calculate(num1, num2) {
     num1 = Number(num1);
     num2 = Number(num2);
+    if (Number.isNaN(num1) || Number.isNaN(num2)) {
+        AC();
+        return "Error";
+    };
     return operate[operator.action](num1, num2);
 }
 
