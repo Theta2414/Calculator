@@ -109,6 +109,7 @@ function addCommas(number) {
 }
 
 function removeCommas(number) {
+    number = number.toString();
     return number.split(",").join("");
 }
 
@@ -157,7 +158,7 @@ function AC() {
 }
 
 function delF() {
-    if (input.value.length === 1 || input.value === `Infinity`) {
+    if (input.value.length === 1 || input.value === `Infinity` || input.value === `Error`) {
         input.value = "0";
         if (focus === "main") {
             main = null;
@@ -186,14 +187,14 @@ function addOperantsAndCalculate() {
     if (clickedEqual) forceStop = false;
     //Data in num1 must be empty, 0 is not considered empty
     if (!main && main !== 0) {
-       main = removeCommas(input.value).toString(); 
+       main = removeCommas(input.value); 
     //Then check queue
     } else if (!queue && queue !== 0) {
-        queue = removeCommas(input.value).toString();
-    //All full, asign to newNum
+        queue = removeCommas(input.value);
+    //All full, assign to newNum
     } else {
         if (!clickedEqual || (clickedEqual && !renew)) {
-            newNum = removeCommas(input.value).toString();
+            newNum = removeCommas(input.value);
         }
     }
     if ((Number(queue) !== Number(newNum))) {
@@ -206,11 +207,7 @@ function addOperantsAndCalculate() {
     if (!forceStop) {
         //main and queue are presented as string, "0" returns true
         if (main && queue && operator.action) {
-            if (calculate(main, queue) !== Infinity)
-                input.value = addCommas(calculate(main, queue));
-            else {
-                input.value = Infinity
-            }
+            input.value = addCommas(calculate(main, queue));
             main = removeCommas(input.value);
             if (show.textContent.includes("=")) {
                 show.textContent = addCommas(main) + operator.key;
