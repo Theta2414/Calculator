@@ -272,6 +272,7 @@ divide.addEventListener("click", (e) => {
 
 percent.addEventListener("click", (e) => {
     input.value = input.value/100;
+    if (focus = "main") main = input.value;
 });
 
 equal.addEventListener("click", (e) => {
@@ -340,6 +341,7 @@ input.addEventListener("keydown", (e) => {
 
         case "%":
             input.value = input.value/100;
+            if (focus = "main") main = input.value;
             break;
         
         case "Delete":
