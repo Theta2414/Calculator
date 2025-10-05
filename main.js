@@ -159,7 +159,7 @@ function delF() {
         };
     } else {
         input.value = addCommas(removeCommas(input.value.slice(0, -1)));
-        if (focus === "main") main = main.toString().slice(0, -1);
+        if (focus === "main") main = main.slice(0, -1);
     }
     renew = false;
 }
@@ -177,18 +177,18 @@ function addOperantsAndCalculate() {
     //Clicking equal button won't activate forceStop
     if (clickedEqual) forceStop = false;
     //Data in num1 must be empty, 0 is not considered empty
-    if (!main && main !== 0) {
+    if (!main) {
        main = removeCommas(input.value); 
     //Then check queue
-    } else if (!queue && queue !== 0) {
+    } else if (!queue) {
         queue = removeCommas(input.value);
     //All full, assign to newNum
     } else {
-        if (!clickedEqual || (clickedEqual && !renew)) {
+        if (!clickedEqual || (clickedEqual && !renew)) { //Clicking equal many times => !renew = false, do not change the value in newNum
             newNum = removeCommas(input.value);
         }
     }
-    if ((Number(queue) !== Number(newNum))) {
+    if (queue !== newNum) {
         //newNum is presented as string, "0" returns true
         if (newNum) {
             queue = newNum;
@@ -246,12 +246,12 @@ divide.addEventListener("click", (e) => {
     click(e);
 });
 
-percent.addEventListener("click", (e) => {
+percent.addEventListener("click", () => {
     input.value = input.value/100;
     if (focus = "main") main = input.value;
 });
 
-equal.addEventListener("click", (e) => {
+equal.addEventListener("click", () => {
     clickedEqual = true;
     addOperantsAndCalculate();
     renew = true;
@@ -272,17 +272,8 @@ input.addEventListener("keydown", (e) => {
             break;
 
         case "+":
-            click(e);
-            break;
-
         case "-":
-            click(e);
-            break;
-
         case "*":
-            click(e);
-            break;
-
         case "/":
             click(e);
             break;
