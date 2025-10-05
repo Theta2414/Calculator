@@ -226,7 +226,7 @@ function click(e) {
     operator = ` ${operator} `;
     renew = true;
     forceStop = true;
-    show.textContent = addCommas(main) + ` ${operator}`;
+    show.textContent = addCommas(main) + `${operator}`;
     focus = "input";
 }
 
