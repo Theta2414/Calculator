@@ -20,14 +20,14 @@ const vals = document.querySelectorAll(".val");
 const delCache = document.querySelector(".del-cache");
 
 const operate = {
-    "add": (num1, num2) => num1 + num2,
+    " + ": (num1, num2) => num1 + num2,
 
-    "subtract": (num1, num2) => num1 - num2,
+    " – ": (num1, num2) => num1 - num2, //This is the subtract sign on the Calculator
 
-    "multiply": (num1, num2) => num1 * num2,
+    " × ": (num1, num2) => num1 * num2,
     
-    "divide": function (num1, num2) {
-        if (num2 === 0) return "Error";
+    " ÷ ": function (num1, num2) {
+        if (num2 === 0) return "Error"; //This is the divide sign on the Calculator
         return num1 / num2;
     }
 }
@@ -40,10 +40,7 @@ let forceStop = false;
 let main = null;
 let queue = null;
 
-let operator = {
-    key: null,
-    action: null
-};
+let operator = null;
 
 let renew = true;
 let newNum = null;
@@ -88,9 +85,8 @@ function addCommas(number) {
         i = 3;
     }
 
-    for (i; i < arr.length; i += 3) {
+    for (i; i < arr.length; i += 4) {
         arr.splice(i, 0, ",");
-        i++;
     }
 
     if (number.includes(".")) {
@@ -117,11 +113,7 @@ function insertDigit(e) {
     if (input.value === "Error") AC();
     if (renew) input.value = "";
     let text = null;
-    if (e.target.textContent) {
-        text = e.target.textContent;
-    } else {
-        text = e.key;
-    }
+    text = e.target.textContent || e.key;
     if (text === "." && !(input.value.includes("."))) {
         input.value += ".";
         renew = false;
@@ -151,8 +143,7 @@ function AC() {
     queue = null;
     newNum = null;
     forceStop = false;
-    operator.key = null;
-    operator.action = null;
+    operator = null;
     focus = "input";
     show.textContent = "";
 }
@@ -179,7 +170,7 @@ function calculate(num1, num2) {
     if (Number.isNaN(num1) || Number.isNaN(num2)) {
         return "Error";
     }
-    return operate[operator.action](num1, num2);
+    return operate[operator](num1, num2);
 }
 
 function addOperantsAndCalculate() {
@@ -206,11 +197,11 @@ function addOperantsAndCalculate() {
     }
     if (!forceStop) {
         //main and queue are presented as string, "0" returns true
-        if (main && queue && operator.action) {
+        if (main && queue && operator) {
             input.value = addCommas(calculate(main, queue));
             main = removeCommas(input.value);
             if (show.textContent.includes("=")) {
-                show.textContent = addCommas(main) + operator.key;
+                show.textContent = addCommas(main) + operator;
             }
             show.textContent += addCommas(queue) + " = ";
         }
@@ -226,48 +217,33 @@ numsPad.forEach(num => num.addEventListener("click", insertDigit));
 ac.addEventListener("click", AC);
 del.addEventListener("click", delF);
 
-add.addEventListener("click", (e) => {
+function click(e) {
     if (input.value === "Error") AC();
     addOperantsAndCalculate();
-    operator.key = " + ";
-    operator.action = "add";
+    operator = `${e.target.textContent}` || `${e.key}`;
+    if (operator === "-") operator = "–"; //Change to the standard sign
+    if (operator === "/") operator = "÷"; //Change to the standard sign
+    operator = ` ${operator} `;
     renew = true;
     forceStop = true;
-    show.textContent = addCommas(main) + " + ";
+    show.textContent = addCommas(main) + ` ${operator}`;
     focus = "input";
+}
+
+add.addEventListener("click", (e) => {
+    click(e);
 });
 
 subtract.addEventListener("click", (e) => {
-    if (input.value === "Error") AC();
-    addOperantsAndCalculate();
-    operator.key = " – ";
-    operator.action = "subtract";
-    renew = true;
-    forceStop = true;
-    show.textContent = addCommas(main) + " – ";
-    focus = "input";
+    click(e);
 });
 
 multiply.addEventListener("click", (e) => {
-    if (input.value === "Error") AC();
-    addOperantsAndCalculate();
-    operator.key = " × ";
-    operator.action = "multiply";
-    renew = true;
-    forceStop = true;
-    show.textContent = addCommas(main) + " × ";
-    focus = "input";
+    click(e);
 });
 
 divide.addEventListener("click", (e) => {
-    if (input.value === "Error") AC();
-    addOperantsAndCalculate();
-    operator.key = " ÷ ";
-    operator.action = "divide";
-    renew = true;
-    forceStop = true;
-    show.textContent = addCommas(main) + " ÷ ";
-    focus = "input";
+    click(e);
 });
 
 percent.addEventListener("click", (e) => {
@@ -296,47 +272,19 @@ input.addEventListener("keydown", (e) => {
             break;
 
         case "+":
-            if (input.value === "Error") AC();
-            addOperantsAndCalculate();
-            operator.key = " + ";
-            operator.action = "add";
-            renew = true;
-            forceStop = true;
-            show.textContent = addCommas(main) + " + ";
-            focus = "input";
+            click(e);
             break;
 
         case "-":
-            if (input.value === "Error") AC();
-            addOperantsAndCalculate();
-            operator.key = " – ";
-            operator.action = "subtract";
-            renew = true;
-            forceStop = true;
-            show.textContent = addCommas(main) + " – ";
-            focus = "input";
+            click(e);
             break;
 
         case "*":
-            if (input.value === "Error") AC();
-            addOperantsAndCalculate();
-            operator.key = " × ";
-            operator.action = "multiply";
-            renew = true;
-            forceStop = true;
-            show.textContent = addCommas(main) + " × ";
-            focus = "input";
+            click(e);
             break;
 
         case "/":
-            if (input.value === "Error") AC();
-            addOperantsAndCalculate();
-            operator.key = " ÷ ";
-            operator.action = "divide";
-            renew = true;
-            forceStop = true;
-            show.textContent = addCommas(main) + " ÷ ";
-            focus = "input";
+            click(e);
             break;
 
         case "%":
@@ -354,11 +302,11 @@ input.addEventListener("keydown", (e) => {
     }
 });
 
-save.addEventListener("click", (e) => {
+save.addEventListener("click", () => {
     board.removeAttribute("hidden");
 });
 
-board.addEventListener("click", (e) => {
+board.addEventListener("click", () => {
     board.setAttribute("hidden", "true");
 });
 
@@ -366,15 +314,15 @@ innerBoard.addEventListener("click", (e) => {
     e.stopPropagation();
 });
 
-close.addEventListener("click", (e) => {
+close.addEventListener("click", () => {
     board.setAttribute("hidden", "true");
 });
 
-saveBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
+saveBtns.forEach((btn, index) => btn.addEventListener("click", () => {
     vals[index].textContent = input.value;
 }));
 
-callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
+callBtns.forEach((btn, index) => btn.addEventListener("click", () => {
     if (focus !== "main") {
         input.value = vals[index].textContent;
         renew = false;
@@ -389,4 +337,4 @@ callBtns.forEach((btn, index) => btn.addEventListener("click", (e) => {
 
 ac.dispatchEvent(new Event("click"));
 
-delCache.addEventListener("click", (e) => vals.forEach(val => val.textContent = "0"));
+delCache.addEventListener("click", () => vals.forEach(val => val.textContent = "0"));
