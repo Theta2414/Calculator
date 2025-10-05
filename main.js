@@ -77,13 +77,8 @@ function addCommas(number) {
         arr = number.split("");
     }
 
-    if (arr.length % 3 === 1) {
-        i = 1;
-    } else if (arr.length % 3 === 2) {
-        i = 2;
-    } else if (arr.length % 3 === 0) {
-        i = 3;
-    }
+    i = arr.length % 3;
+    if (i === 0) i = 3;
 
     for (i; i < arr.length; i += 4) {
         arr.splice(i, 0, ",");
