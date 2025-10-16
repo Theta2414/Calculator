@@ -217,7 +217,8 @@ function click(e) {
     addOperantsAndCalculate();
     operator = `${e.target.textContent}` || `${e.key}`;
     if (operator === "-") operator = "–"; //Change to the standard sign
-    if (operator === "/") operator = "÷"; //Change to the standard sign
+    if (operator === "*") operator = "×";
+    if (operator === "/") operator = "÷";
     operator = ` ${operator} `;
     renew = true;
     forceStop = true;
