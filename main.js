@@ -4,10 +4,7 @@ const show = document.querySelector(".show");
 const input = document.querySelector(".input-field");
 const ac = document.querySelector(".btn-ac");
 const del = document.querySelector(".btn-del");
-const add = document.querySelector(".btn-add");
-const subtract = document.querySelector(".btn-sub");
-const multiply = document.querySelector(".btn-multi");
-const divide = document.querySelector(".btn-divide");
+const operatorBtns = document.querySelectorAll(".oper");
 const percent = document.querySelector(".btn-percent");
 const equal = document.querySelector(".btn-equal");
 const save = document.querySelector(".btn-save");
@@ -177,7 +174,7 @@ function addOperantsAndCalculate() {
     //Then check queue
     } else if (!queue) {
         queue = removeCommas(input.value);
-    //All full, assign to newNum
+    //All full, assign to newNum. Also used to handle multiple clicks on equal button
     } else {
         if (!clickedEqual || (clickedEqual && !renew)) { //Clicking equal many times => !renew = false, do not change the value in newNum
             newNum = removeCommas(input.value);
@@ -226,21 +223,7 @@ function click(e) {
     focus = "input";
 }
 
-add.addEventListener("click", (e) => {
-    click(e);
-});
-
-subtract.addEventListener("click", (e) => {
-    click(e);
-});
-
-multiply.addEventListener("click", (e) => {
-    click(e);
-});
-
-divide.addEventListener("click", (e) => {
-    click(e);
-});
+operatorBtns.forEach(btn => btn.addEventListener("click", e => click(e)));
 
 percent.addEventListener("click", () => {
     input.value = input.value/100;
