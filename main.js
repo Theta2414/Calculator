@@ -168,13 +168,14 @@ function calculate(num1, num2) {
 function addOperantsAndCalculate() {
     //Clicking equal button won't activate forceStop
     if (clickedEqual) forceStop = false;
-    //Data in num1 must be empty, 0 is not considered empty
+    //Data in main must be empty, 0 is not considered empty
+    //main and queue have already been strings
     if (!main) {
        main = removeCommas(input.value); 
     //Then check queue
     } else if (!queue) {
         queue = removeCommas(input.value);
-    //All full, assign to newNum. Also used to handle multiple clicks on equal button
+    //All full, assign to newNum. This is also used to handle multiple clicks on equal button
     } else {
         if (!clickedEqual || (clickedEqual && !renew)) { //Clicking equal many times => !renew = false, do not change the value in newNum
             newNum = removeCommas(input.value);
