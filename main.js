@@ -29,7 +29,7 @@ const operate = {
     }
 }
 
-const digit = "0123456789.";
+const digits = "0123456789.";
 
 //Not allow to calculate
 let forceStop = false;
@@ -267,7 +267,7 @@ input.addEventListener("keydown", (e) => {
             break;
 
         default:
-            if (digit.includes(e.key)) insertDigit(e);
+            if (digits.includes(e.key)) insertDigit(e);
             break;
     }
 });
