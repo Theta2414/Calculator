@@ -107,10 +107,18 @@ function insertDigit(e) {
     let text = null;
     text = e.target.textContent || e.key;
     if (text === "." && !(input.value.includes("."))) {
-        input.value += ".";
-        renew = false;
-        forceStop = false;
-        focus = "input";
+        if (input.value === "") {
+            input.value += "0.";
+            renew = false;
+            forceStop = false;
+            focus = "input";
+        }
+        else {
+            input.value += ".";
+            renew = false;
+            forceStop = false;
+            focus = "input";
+        }
     } else if (text === "0" && (input.value[0] !== "0")) {
         input.value += "0";
         renew = false;
