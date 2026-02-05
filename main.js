@@ -104,21 +104,18 @@ function removeCommas(number) {
 function insertDigit(e) {
     if (input.value === "Error") AC();
     if (renew) input.value = "";
-    let text = null;
-    text = e.target.textContent || e.key;
+    if (focus === "main") AC();
+    let text = e.target.textContent || e.key;
     if (text === "." && !(input.value.includes("."))) {
         if (input.value === "") {
             input.value += "0.";
-            renew = false;
-            forceStop = false;
-            focus = "input";
         }
         else {
             input.value += ".";
-            renew = false;
-            forceStop = false;
-            focus = "input";
         }
+        renew = false;
+        forceStop = false;
+        focus = "input";
     } else if (text === "0" && (input.value[0] !== "0")) {
         input.value += "0";
         renew = false;
@@ -126,7 +123,7 @@ function insertDigit(e) {
         focus = "input";
         input.value = removeCommas(input.value);
         input.value = addCommas(input.value);
-    } else if (text !== "." && text !== "0") {
+    } else if (text !== ".") {
         if (input.value[0] === "0" && input.value[1] !== ".") input.value = "";
         input.value += text;
         renew = false;
@@ -236,7 +233,7 @@ operatorBtns.forEach(btn => btn.addEventListener("click", e => click(e)));
 
 percent.addEventListener("click", () => {
     input.value = input.value/100;
-    if (focus = "main") main = input.value;
+    if (focus === "main") main = input.value;
 });
 
 equal.addEventListener("click", () => {
@@ -268,7 +265,7 @@ input.addEventListener("keydown", (e) => {
 
         case "%":
             input.value = input.value/100;
-            if (focus = "main") main = input.value;
+            if (focus === "main") main = input.value;
             break;
         
         case "Delete":
