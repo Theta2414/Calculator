@@ -61,7 +61,7 @@ function addCommas(number) {
 
     if (number.length <= 3) {
         if (negative) {
-            return "-" + number;
+            return "–" + number;
         } else {
             return number;
         }
@@ -83,13 +83,13 @@ function addCommas(number) {
 
     if (number.includes(".")) {
         if (negative) {
-            return "-" + arr.join("") + "." + after;
+            return "–" + arr.join("") + "." + after;
         } else {
             return arr.join("") + "." + after;
         }
     } else {
         if (negative) {
-            return "-" + arr.join("");
+            return "–" + arr.join("");
         } else {
             return arr.join("");
         }
@@ -98,7 +98,8 @@ function addCommas(number) {
 
 function removeCommas(number) {
     number = number.toString();
-    return number.split(",").join("");
+    let result = number.split(",").join("");
+    return (number.at(0) === "–") ? "-" + result.slice(1) : result;
 }
 
 function insertDigit(e) {
