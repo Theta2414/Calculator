@@ -303,11 +303,13 @@ callBtns.forEach((btn, index) => btn.addEventListener("click", () => {
     if (focus !== "main") {
         input.value = vals[index].textContent;
         renew = false;
+        forceStop = false;
         board.setAttribute("hidden", "true");
     } else {
         AC();
         input.value = vals[index].textContent;
         renew = false;
+        forceStop = false;
         board.setAttribute("hidden", "true");
     }
 }));
